@@ -1,87 +1,125 @@
-var w;
-var columns;
-var rows;
-var board;
-var next;
+
+// All the paths
+var paths = [];
+// Are we painting?
+var painting = false;
+// How long until the next circle
+var next = 0;
+// Where are we now and where were we?
+var current;
+var previous;
 
 function setup() {
   createCanvas(720, 400);
-  w = 20;
-  // Calculate columns and rows
-  columns = floor(width/w);
-  rows = floor(height/w);
-  // Wacky way to make a 2D array is JS
-  board = new Array(columns);
-  for (var i = 0; i < columns; i++) {
-    board[i] = new Array(rows);
-  }
-  // Going to use multiple 2D arrays and swap them
-  next = new Array(columns);
-  for (i = 0; i < columns; i++) {
-    next[i] = new Array(rows);
-  }
-  init();
-}
+  current = createVector(0,0);
+  previous = createVector(0,0);
+};
 
 function draw() {
-  background(255);
-  generate();
-  for ( var i = 0; i < columns;i++) {
-    for ( var j = 0; j < rows;j++) {
-      if ((board[i][j] == 1)) fill(0);
-      else fill(255);
-      stroke(0);
-      rect(i*w, j*w, w-1, w-1);
-    }
+  background(200);
+
+  // If it's time for a new point
+  if (millis() > next && painting) {
+
+    // Grab mouse position
+    current.x = mouseX;
+    current.y = mouseY;
+
+    // New particle's force is based on mouse movement
+    var force = p5.Vector.sub(current, previous);
+    force.mult(0.05);
+
+    // Add new particle
+    paths[paths.length - 1].add(current, force);
+
+    // Schedule next circle
+    next = millis() + random(100);
+
+    // Store mouse values
+    previous.x = current.x;
+    previous.y = current.y;
   }
 
+  // Draw all paths
+  for( var i = 0; i < paths.length; i++) {
+    paths[i].update();
+    paths[i].display();
+  }
 }
 
-// reset board when mouse is pressed
+// Start it up
 function mousePressed() {
-  init();
+  next = 0;
+  painting = true;
+  previous.x = mouseX;
+  previous.y = mouseY;
+  paths.push(new Path());
 }
 
-// Fill board randomly
-function init() {
-  for (var i = 0; i < columns; i++) {
-    for (var j = 0; j < rows; j++) {
-      // Lining the edges with 0s
-      if (i == 0 || j == 0 || i == columns-1 || j == rows-1) board[i][j] = 0;
-      // Filling the rest randomly
-      else board[i][j] = floor(random(2));
-      next[i][j] = 0;
-    }
+// Stop
+function mouseReleased() {
+  painting = false;
+}
+
+// A Path is a list of particles
+function Path() {
+  this.particles = [];
+  this.hue = random(100);
+}
+
+Path.prototype.add = function(position, force) {
+  // Add a new particle with a position, force, and hue
+  this.particles.push(new Particle(position, force, this.hue));
+}
+
+// Display plath
+Path.prototype.update = function() {
+  for (var i = 0; i < this.particles.length; i++) {
+    this.particles[i].update();
   }
 }
 
-// The process of creating the new generation
-function generate() {
+// Display plath
+Path.prototype.display = function() {
 
-  // Loop through every spot in our 2D array and check spots neighbors
-  for (var x = 1; x < columns - 1; x++) {
-    for (var y = 1; y < rows - 1; y++) {
-      // Add up all the states in a 3x3 surrounding grid
-      var neighbors = 0;
-      for (var i = -1; i <= 1; i++) {
-        for (var j = -1; j <= 1; j++) {
-          neighbors += board[x+i][y+j];
-        }
-      }
-
-      // A little trick to subtract the current cell's state since
-      // we added it in the above loop
-      neighbors -= board[x][y];
-      // Rules of Life
-      if      ((board[x][y] == 1) && (neighbors <  2)) next[x][y] = 0;           // Loneliness
-      else if ((board[x][y] == 1) && (neighbors >  3)) next[x][y] = 0;           // Overpopulation
-      else if ((board[x][y] == 0) && (neighbors == 3)) next[x][y] = 1;           // Reproduction
-      else                                             next[x][y] = board[x][y]; // Stasis
+  // Loop through backwards
+  for (var i = this.particles.length - 1; i >= 0; i--) {
+    // If we shold remove it
+    if (this.particles[i].lifespan <= 0) {
+      this.particles.splice(i, 1);
+    // Otherwise, display it
+    } else {
+      this.particles[i].display(this.particles[i+1]);
     }
   }
 
-  // Swap!
-  var temp = board;
-  board = next;
-  next = temp;
+}
+
+// Particles along the path
+function Particle(position, force, hue) {
+  this.position = createVector(position.x, position.y);
+  this.velocity = createVector(force.x, force.y);
+  this.drag = 0.95;
+  this.lifespan = 255;
+}
+
+Particle.prototype.update = function() {
+  // Move it
+  this.position.add(this.velocity);
+  // Slow it down
+  this.velocity.mult(this.drag);
+  // Fade it out
+  this.lifespan--;
+}
+
+// Draw particle and connect it with a line
+// Draw a line to another
+Particle.prototype.display = function(other) {
+  stroke(0, this.lifespan);
+  fill(0, this.lifespan/2);
+  ellipse(this.position.x,this.position.y, 8, 8);
+  // If we need to draw a line
+  if (other) {
+    line(this.position.x, this.position.y, other.position.x, other.position.y);
+  }
 }
