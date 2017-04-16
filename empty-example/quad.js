@@ -1,11 +1,10 @@
-var cards = [];
-var card_map = {}
-var grid = Array(3);
-var deck = [];
-var card_icon;
-var DECKX = 120;
-var DECKY = 300;
 var MOVE_RATE = 0.12;
+var CARD_WIDTH = 100;
+var CARD_HEIGHT = 140;
+var DECKX = CARD_WIDTH * 2;
+var DECKY = CARD_HEIGHT * 4;
+var card_icon;
+p5.disableFriendlyErrors = true;
 
 function get_delta(start, end) {
     var delta = end - start;
@@ -23,7 +22,7 @@ function get_delta(start, end) {
 }
 
 function grid_to_canvas(r, c) {
-    return [60 * c, 80 * r];
+    return [CARD_WIDTH * c, CARD_HEIGHT * r];
 }
 
 function canvas_to_grid(x, y) {
@@ -52,16 +51,16 @@ function Card(x, y, id) {
         }
     }
 
-    this.render = function() {
-        fill(244, 66, 101);
+    this.render = function(p) {
+        p.fill(244, 66, 101);
         // rect(this.x, this.y, 50, 70);
-        image(card_icon, this.x, this.y, 50, 70)
+        p.image(card_icon, this.x, this.y, CARD_WIDTH, CARD_HEIGHT)
 
-        textSize(32);
-        fill(60);
-        textAlign(CENTER)
-        text(this.id, this.x + 25, this.y + 50);
-        noFill();
+        p.textSize(32);
+        p.fill(60);
+        p.textAlign(p.CENTER)
+        p.text(this.id, this.x + CARD_WIDTH / 2, this.y + CARD_HEIGHT / 2);
+        p.noFill();
     }
 
     this.isDone = function () {
@@ -90,58 +89,107 @@ function row_pickup(card_map, grid, deck, cards, i) {
 
 
 
-function setup() {
-    createCanvas(720, 600);
-    var count = 0;
-    for (var r = 0; r < 3; r++) {
-        var row = Array(5);
-        for (var c = 0; c < 5; c++) {
-            //deck init
-            var card = new Card(DECKX, DECKY, '' + count);
-            card_map[count] = card;
-            count += 1;
-            cards.push(card);
-            deck.unshift(card);
 
-            //grid init
-            // var dest = grid_to_canvas(r, c);
-            // var card = new Card(dest[0], dest[1], '' + count);
-            // cards.push(card);
-            // row[c] = card;
-            // count += 1;
+var row_sketch_canvas = function (p) {
+    var cards = [];
+    var card_map = {}
+    var grid = Array(3);
+    var deck = [];
 
+    p.setup = function() {
+        p.createCanvas(800, 800);
+        var count = 0;
+        for (var r = 0; r < 3; r++) {
+            var row = Array(5);
+            for (var c = 0; c < 5; c++) {
+                //deck init
+                var card = new Card(DECKX, DECKY, '' + count);
+                card_map[count] = card;
+                count += 1;
+                cards.push(card);
+                deck.unshift(card);
+
+                //grid init
+                // var dest = grid_to_canvas(r, c);
+                // var card = new Card(dest[0], dest[1], '' + count);
+                // cards.push(card);
+                // row[c] = card;
+                // count += 1;
+
+            }
+            grid[r] = row;
+         }
+        card_icon = p.loadImage("card.png");
+    };
+
+
+    var step = 0;
+    var STATE = 0
+
+    p.draw = function () {
+        p.clear();
+        cards.forEach((e) => {e.render(p)});
+        deck.forEach((e) => {e.render(p)});
+
+        cards.forEach((e) => {e.tick()});
+        if (STATE == 0) {
+            if (cards.every((e) => {return e.isDone()})) {
+                row_deal(card_map, grid, deck, cards, step);
+                step += 1
+            }
+        } else if (STATE == 1) {
+            if (cards.every((e) => {return e.isDone()})) {
+                row_pickup(card_map, grid, deck, cards, step);
+                step += 1;
+            }
         }
-        grid[r] = row;
-     }
+        if (step == 15) {
+            STATE = (STATE + 1) % 2;
+            step = 0;
+        }
+    };
+}
 
-    card_icon = loadImage("card.png");
-};
+var col_sketch_canvas = function (p) {
+    var cards = [];
+    var card_map = {}
+    var grid = Array(3);
+    var deck = [];
+
+    p.setup = function() {
+        p.createCanvas(800, 800);
+        var count = 0;
+        for (var r = 0; r < 3; r++) {
+            var row = Array(5);
+            for (var c = 0; c < 5; c++) {
+                //deck init
+                var card = new Card(DECKX, DECKY, '' + count);
+                card_map[count] = card;
+                count += 1;
+                cards.push(card);
+                deck.unshift(card);
+            }
+            grid[r] = row;
+         }
+        card_icon = p.loadImage("card.png");
+    };
 
 
-var step = 0;
-var STATE = 0
-function draw() {
-    clear();
-    cards.forEach((e) => {e.render()});
-    deck.forEach((e) => {e.render()});
+    var step = 0;
+    var STATE = 0
 
-    cards.forEach((e) => {e.tick()});
-    if (STATE == 0) {
+    p.draw = function () {
+        p.clear();
+        cards.forEach((e) => {e.render(p)});
+        deck.forEach((e) => {e.render(p)});
+        cards.forEach((e) => {e.tick()});
+
         if (cards.every((e) => {return e.isDone()})) {
             row_deal(card_map, grid, deck, cards, step);
             step += 1
         }
-    } else if (STATE == 1) {
-        if (cards.every((e) => {return e.isDone()})) {
-            row_pickup(card_map, grid, deck, cards, step);
-            step += 1;
-        }
-    }
+    };
+}
 
-    if (step == 15) {
-        STATE = (STATE + 1) % 2;
-        step = 0;
-    }
-
-};
-
+var row_sketch = new p5(row_sketch_canvas, "test");
+var col_sketch = new p5(col_sketch_canvas, "test2");
