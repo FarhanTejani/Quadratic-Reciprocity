@@ -77,14 +77,6 @@ function row_deal(card_map, grid, deck, cards, i) {
     var dest = grid_to_canvas(Math.floor(i / 5), i % 5);
     card.setDest(dest[0], dest[1]);
     grid[r][c] = card;
-    // for (var r = 0; r < 3; r++) {
-    //     for (var c = 0; c < 5; c++) {
-    //         var card = deck.pop();
-    //         l = grid_to_canvas(r, c);
-    //         card.setDest(l[0], l[1]);
-    //         return
-    //     }
-    // }
 }
 
 function row_pickup(card_map, grid, deck, cards, i) {
@@ -121,11 +113,7 @@ function setup() {
         }
         grid[r] = row;
      }
-    // cards.push(new Card(10, 10));
-    // cards[0].setDest(100, 100);
-    // console.log(cards[0]);
-    // cards[0].tick();
-    // row_deal(card_map, grid, deck);
+
     card_icon = loadImage("card.png");
 };
 
@@ -137,12 +125,10 @@ function draw() {
     cards.forEach((e) => {e.render()});
     deck.forEach((e) => {e.render()});
 
-    // cards.forEach((e) => {e.render()});
     cards.forEach((e) => {e.tick()});
     if (STATE == 0) {
         if (cards.every((e) => {return e.isDone()})) {
             row_deal(card_map, grid, deck, cards, step);
-        // t = row_deal(card_map, grid, deck, cards, t);
             step += 1
         }
     } else if (STATE == 1) {
