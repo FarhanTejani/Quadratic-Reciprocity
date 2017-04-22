@@ -118,6 +118,7 @@ var alpha_sketch_canvas = function (p) {
     var card_map = {}
     var grid = Array(3);
     var deck = [];
+    var on = false;
 
     p.setup = function() {
         p.createCanvas(CANVASX, CANVASY);
@@ -172,6 +173,16 @@ var alpha_sketch_canvas = function (p) {
             step = 0;
         }
     };
+    p.mouseClicked = function() {
+        if (this.on) {
+            p.noLoop();
+            this.on = false;
+            return false;
+        }
+        p.loop();
+        this.on = true;
+        return false;
+    }
 }
 
 var beta_sketch_canvas = function (p) {
@@ -180,6 +191,7 @@ var beta_sketch_canvas = function (p) {
     var grid = Array(3);
     var deck = [];
 
+    var on = false;
     p.setup = function() {
         p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
@@ -224,6 +236,16 @@ var beta_sketch_canvas = function (p) {
             step = 0;
         }
     };
+    p.mouseClicked = function() {
+        if (this.on) {
+            p.noLoop();
+            this.on = false;
+            return false;
+        }
+        p.loop();
+        this.on = true;
+        return false;
+    }
 }
 
 var gamma_sketch_canvas = function (p) {
@@ -232,6 +254,7 @@ var gamma_sketch_canvas = function (p) {
     var grid = Array(3);
     var deck = [];
 
+    var on = false;
     p.setup = function() {
         p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
@@ -277,6 +300,16 @@ var gamma_sketch_canvas = function (p) {
             console.log(p.frameRate());
         }
     };
+    p.mouseClicked = function() {
+        if (this.on) {
+            p.noLoop();
+            this.on = false;
+            return false;
+        }
+        p.loop();
+        this.on = true;
+        return false;
+    }
 }
 
 var row_canvas = function (p) {
@@ -284,6 +317,7 @@ var row_canvas = function (p) {
     var card_map = {}
     var grid = Array(3);
     var deck = [];
+    var on = false;
     p.setup = function() {
         p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
@@ -327,6 +361,17 @@ var row_canvas = function (p) {
             console.log(p.frameRate());
         }
     };
+
+    p.mouseClicked = function() {
+        if (this.on) {
+            p.noLoop();
+            this.on = false;
+            return false;
+        }
+        p.loop();
+        this.on = true;
+        return false
+    }
 }
 
 var col_canvas = function (p) {
@@ -334,6 +379,7 @@ var col_canvas = function (p) {
     var card_map = {}
     var grid = Array(3);
     var deck = [];
+    var on = false;
     p.setup = function() {
         p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
@@ -377,6 +423,16 @@ var col_canvas = function (p) {
             console.log(p.frameRate());
         }
     };
+    p.mouseClicked = function() {
+        if (this.on) {
+            p.noLoop();
+            this.on = false;
+            return false;
+        }
+        p.loop();
+        this.on = true;
+        return false;
+    }
 }
 
 var diag_canvas = function (p) {
@@ -384,6 +440,7 @@ var diag_canvas = function (p) {
     var card_map = {}
     var grid = Array(3);
     var deck = [];
+    var on = false;
     p.setup = function() {
         p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
@@ -427,6 +484,16 @@ var diag_canvas = function (p) {
             console.log(p.frameRate());
         }
     };
+    p.mouseClicked = function() {
+        if (this.on) {
+            p.noLoop();
+            this.on = false;
+            return false;
+        }
+        p.loop();
+        this.on = true;
+        return false;
+    }
 }
 
 var alpha_sktech = new p5(alpha_sketch_canvas, "alpha");
