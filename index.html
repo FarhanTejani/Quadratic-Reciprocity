@@ -15,6 +15,9 @@
     <script type="text/javascript" async
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
+    <script language="javascript" type="text/javascript" src="empty-example/libraries/p5.js"></script>
+    <script language="javascript" type="text/javascript" src="empty-example/permutations.js"></script>
+    <script language="javascript" type="text/javascript" src="empty-example/quad.js"></script>
 </head>
 
 <body>
@@ -24,7 +27,7 @@
 
             <span style="font-weight:bold">Example:</span> Are there solutions to the congruence $x^2 + 4x \equiv 10 \pmod{7}$? <br>
 
-            <span style="font-weight:bold">Theorem:</span>
+            <span style="font-weight:bold">Definition:</span>
             Let $p$ and $q$ be distinct odd primes. Then the law of quadratic reciprocity can be broken into three parts:
 
                 $$\left( \frac{-1}{p} \right) =
@@ -74,6 +77,9 @@
         </p>
 
         <h3>Gauss's Lemma</h3>
+        <p>
+            Pull from text...
+        </p>
 
         <h2>A Journey through Permutations</h2>
         <p>
@@ -87,8 +93,8 @@
                     1       & n = 4
                 \end{cases}$$
 
-            It can be visualized as such: <br>
-            //TODO: Visualization of above <br>
+            It can be visualized as such:
+            <div id = "static_perm" align="center"></div>
 
             Notice the cycle decomposition and $sgn()$ value accompanying the figure above. <br>
             <span style="font-weight:bold">Definition:</span>
@@ -104,18 +110,19 @@
 
             or equivalently $sgn(p) = (-1)^{\text{# of inversions}}$ where an inversion is a pair $(i, j)$ such that $i < j$, but $p(i) > p(j)$. <br>
 
-            Permutations can be composed just like normal functions. Say you have a permutation $\sigma$ and another permutation $\tau$. Then $\sigma \circ \tau = \sigma(\tau(n))$ and $\tau \circ \sigma = \tau(\sigma(n))$. Note that permutation groups are non-abelian, so $\sigma \circ \tau \neq \tau \circ \sigma$. Try composing some permutations yourself below: <br>
+            Permutations can be composed just like normal functions. Say you have a permutation $\sigma$ and another permutation $\tau$. Then $\sigma \circ \tau = \sigma(\tau(n))$ and $\tau \circ \sigma = \tau(\sigma(n))$. Note that permutation groups are non-abelian, so $\sigma \circ \tau \neq \tau \circ \sigma$.
+            <h4>Try composing some permutations yourself below:</h4>
 
-            //TODO: ADD MAIN PERMUTATION ANIMATION HERE
+            <div id = "perm" align="center"></div>
             <br>
-            <span style="font-weight:bold">More sign facts:</span>
-            $$sign(\sigma\tau) = sign(\sigma) \cdot sign(\tau)$$
-            $$sign(\text{m-length-cycle}) = (-1)^{m-1}$$
+            <span style="font-weight:bold">Other sign facts:</span>
+            $$sgn(\sigma\tau) = sign(\sigma) \cdot sign(\tau)$$
+            $$sgn(\text{m-length-cycle}) = (-1)^{m-1}$$
         </p>
 
         <h2>Matt Baker's Proof</h2>
         <p>
-
+            Now with some basic knowledge of permutations, we are ready to tackle the proof that Dr. Matt Baker outlines in his blog <a href="https://mattbaker.blog/2013/07/03/quadratic-reciprocity-and-zolotarevs-lemma/">here</a>.
         </p>
 
         <h3>Zolotarev's Lemma</h3>
@@ -127,13 +134,31 @@
         <p>
             Evaluating Legendre symbols is useful, but for large numbers, it is not feasible to factor the numerator and split into multiple Legendre symbols. This is where the Generalized Law of Quadratic Reciprocity comes in.
 
-            It states: Given positive odd integers a and b,
+            <span style="font-weight:bold">Definition:</span>
+            Let $a$ and $b$ be odd positive integers. Then the generalized law of quadratic reciprocity can be broken into three parts:
 
-            (-1/b) = ...
-            (2/b) = ...
-            (a/b) = {(b/a) if a or b congurent 1 mod 4, -(b/a) if a and b congruent 3 mod 4}
+              $$\left( \frac{-1}{b} \right) =
+                \begin{cases}
+                    1   &b \equiv 1 \pmod{4} \\
+                    -1  &b \equiv 3 \pmod{4}
+                \end{cases}$$
+                $$\left( \frac{2}{b} \right) =
+                \begin{cases}
+                    1   &b \equiv 1 \rm\ or\ 7 \pmod{8} \\
+                    -1  &b \equiv 3 \rm\ or\ 5 \pmod{8}
+                \end{cases}$$
+                $$\left( \frac{a}{b} \right) =
+                \begin{cases}
+                    \left( \frac{b}{a} \right)   &a \equiv 1 \pmod{4} \text{ or } b \equiv 1 \pmod{4} \\
+                    -\left( \frac{b}{a} \right)  &a \equiv 3 \pmod{4} \text{ and } b \equiv 3 \pmod{4}
+                \end{cases}$$
 
-            As you may have noticed, this statement is extremely similar to the Law of Quad. Rec. discussed above.
+            As you may have noticed, this statement is extremely similar to the Law of Quadratic Reciprocity discussed above. <br>
+
+            <span style="font-weight:bold">Example:</span>
+            $$\left( \frac{55}{179} \right) = -\left( \frac{179}{55} \right) = -\left( \frac{14}{55} \right) = -\left( \frac{2}{55} \right) \cdot \left( \frac{7}{55} \right) = \left( \frac{55}{7} \right) = \left( \frac{6}{7} \right) = \left( \frac{2}{7} \right) \cdot \left( \frac{3}{7} \right) =  -\left( \frac{7}{3} \right) = -\left( \frac{1}{3} \right) = -1$$.
+
+            As you can see, we were able to evaluate the same Legendre as the beginning of the article without factoring $55$.
         </p>
 
 </body>
