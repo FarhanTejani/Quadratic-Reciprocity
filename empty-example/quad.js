@@ -1,9 +1,11 @@
-var MOVE_RATE = 0.3;
+var MOVE_RATE = 0.5;
 var BASE_RATE = 1;
 var CARD_WIDTH = 100;
 var CARD_HEIGHT = 140;
 var DECKX = CARD_WIDTH * 2;
 var DECKY = CARD_HEIGHT * 4;
+var CANVASX = 600;
+var CANVASY = 700;
 var FPS = 30;
 var card_icon;
 p5.disableFriendlyErrors = true;
@@ -118,7 +120,7 @@ var alpha_sketch_canvas = function (p) {
     var deck = [];
 
     p.setup = function() {
-        p.createCanvas(800, 800);
+        p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
         var count = 0;
         for (var r = 0; r < 3; r++) {
@@ -179,7 +181,7 @@ var beta_sketch_canvas = function (p) {
     var deck = [];
 
     p.setup = function() {
-        p.createCanvas(800, 800);
+        p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
         var count = 0;
         for (var r = 0; r < 3; r++) {
@@ -231,7 +233,7 @@ var gamma_sketch_canvas = function (p) {
     var deck = [];
 
     p.setup = function() {
-        p.createCanvas(800, 800);
+        p.createCanvas(CANVASX, CANVASY);
         p.frameRate(FPS);
         var count = 0;
         for (var r = 0; r < 3; r++) {
@@ -277,9 +279,164 @@ var gamma_sketch_canvas = function (p) {
     };
 }
 
-// var alpha_sktech = new p5(alpha_sketch_canvas, "alpha");
-// var beta_sktech = new p5(beta_sketch_canvas, "beta");
-// var gamma_sketch = new p5(gamma_sketch_canvas, "gamma");
+var row_canvas = function (p) {
+    var cards = [];
+    var card_map = {}
+    var grid = Array(3);
+    var deck = [];
+    p.setup = function() {
+        p.createCanvas(CANVASX, CANVASY);
+        p.frameRate(FPS);
+        var count = 0;
+        for (var r = 0; r < 3; r++) {
+            var row = Array(5);
+            for (var c = 0; c < 5; c++) {
+                //deck init
+                var card = new Card(DECKX, DECKY, '' + count);
+                card_map[count] = card;
+                count += 1;
+                cards.push(card);
+                deck.unshift(card);
+            }
+            grid[r] = row;
+         }
+        card_icon = p.loadImage("card.png");
+    };
+    var step = 0;
+    var STATE = 0
+    p.draw = function () {
+        p.clear();
+        cards.forEach(function(e) {e.render(p)});
+        deck.forEach(function(e) {e.render(p)});
+
+        cards.forEach(function(e) {e.tick()});
+        if (STATE == 0) {
+            if (cards.every(function(e) {return e.isDone()})) {
+                row_deal(grid, deck, step);
+                step += 1
+            }
+        } else if (STATE == 1) {
+            if (cards.every(function(e) {return e.isDone()})) {
+                row_pickup(grid, deck, step);
+                step += 1;
+            }
+        }
+        if (step == 15) {
+            STATE = (STATE + 1) % 2;
+            step = 0;
+            console.log(p.frameRate());
+        }
+    };
+}
+
+var col_canvas = function (p) {
+    var cards = [];
+    var card_map = {}
+    var grid = Array(3);
+    var deck = [];
+    p.setup = function() {
+        p.createCanvas(CANVASX, CANVASY);
+        p.frameRate(FPS);
+        var count = 0;
+        for (var r = 0; r < 3; r++) {
+            var row = Array(5);
+            for (var c = 0; c < 5; c++) {
+                //deck init
+                var card = new Card(DECKX, DECKY, '' + count);
+                card_map[count] = card;
+                count += 1;
+                cards.push(card);
+                deck.unshift(card);
+            }
+            grid[r] = row;
+         }
+        card_icon = p.loadImage("card.png");
+    };
+    var step = 0;
+    var STATE = 0
+    p.draw = function () {
+        p.clear();
+        cards.forEach(function(e) {e.render(p)});
+        deck.forEach(function(e) {e.render(p)});
+
+        cards.forEach(function(e) {e.tick()});
+        if (STATE == 0) {
+            if (cards.every(function(e) {return e.isDone()})) {
+                col_deal(grid, deck, step);
+                step += 1
+            }
+        } else if (STATE == 1) {
+            if (cards.every(function(e) {return e.isDone()})) {
+                col_pickup(grid, deck, step);
+                step += 1;
+            }
+        }
+        if (step == 15) {
+            STATE = (STATE + 1) % 2;
+            step = 0;
+            console.log(p.frameRate());
+        }
+    };
+}
+
+var diag_canvas = function (p) {
+    var cards = [];
+    var card_map = {}
+    var grid = Array(3);
+    var deck = [];
+    p.setup = function() {
+        p.createCanvas(CANVASX, CANVASY);
+        p.frameRate(FPS);
+        var count = 0;
+        for (var r = 0; r < 3; r++) {
+            var row = Array(5);
+            for (var c = 0; c < 5; c++) {
+                //deck init
+                var card = new Card(DECKX, DECKY, '' + count);
+                card_map[count] = card;
+                count += 1;
+                cards.push(card);
+                deck.unshift(card);
+            }
+            grid[r] = row;
+         }
+        card_icon = p.loadImage("card.png");
+    };
+    var step = 0;
+    var STATE = 0
+    p.draw = function () {
+        p.clear();
+        cards.forEach(function(e) {e.render(p)});
+        deck.forEach(function(e) {e.render(p)});
+
+        cards.forEach(function(e) {e.tick()});
+        if (STATE == 0) {
+            if (cards.every(function(e) {return e.isDone()})) {
+                diag_deal(grid, deck, step);
+                step += 1
+            }
+        } else if (STATE == 1) {
+            if (cards.every(function(e) {return e.isDone()})) {
+                diag_pickup(grid, deck, step);
+                step += 1;
+            }
+        }
+        if (step == 15) {
+            STATE = (STATE + 1) % 2;
+            step = 0;
+            console.log(p.frameRate());
+        }
+    };
+}
+
+var alpha_sktech = new p5(alpha_sketch_canvas, "alpha");
+var beta_sktech = new p5(beta_sketch_canvas, "beta");
+var gamma_sketch = new p5(gamma_sketch_canvas, "gamma");
+var row_sketch = new p5(row_canvas, "row-card");
+var col_sktech = new p5(col_canvas, "col-card");
+var diag_sketch = new p5(diag_canvas, "diag-card");
+
+
 
 
 
