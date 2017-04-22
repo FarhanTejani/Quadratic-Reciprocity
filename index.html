@@ -96,11 +96,14 @@
             It can be visualized as such:
             <div id = "static_perm" align="center"></div>
 
-            Notice the cycle decomposition and $sgn()$ value accompanying the figure above. <br>
+            Notice the cycle decomposition and $sgn()$ value accompanying the figure above.
+            <br>
             <span style="font-weight:bold">Definition:</span>
             The $\textit{cycle decomposition}$ is a quick way to write out a permutation without having to draw it or write out a piecewise function. It simply maps the current element to the subsequent one.
+            <br>
             <span style="font-weight:bold">Example:</span>
-            The cycle decomposition $(1 3 2 4)$ refers to the permutation mapping $1 \to 3 \to 2 \to 4 \to 1$. <br>
+            The cycle decomposition $(1 3 2 4)$ refers to the permutation mapping $1 \to 3 \to 2 \to 4 \to 1$.
+            <br>
             <span style="font-weight:bold">Definition:</span>
             The $sgn()$ or sign of a permutation $p$ is defined as
                 $$sgn(p) = \begin{cases}
@@ -108,7 +111,8 @@
                     -1      &\text{if the number of crossings is odd}
                 \end{cases}$$
 
-            or equivalently $sgn(p) = (-1)^{\text{# of inversions}}$ where an inversion is a pair $(i, j)$ such that $i < j$, but $p(i) > p(j)$. <br>
+            or equivalently $sgn(p) = (-1)^{\text{# of inversions}}$ where an inversion is a pair $(i, j)$ such that $i < j$, but $p(i) > p(j)$.
+            <br>
 
             Permutations can be composed just like normal functions. Say you have a permutation $\sigma$ and another permutation $\tau$. Then $\sigma \circ \tau = \sigma(\tau(n))$ and $\tau \circ \sigma = \tau(\sigma(n))$. Note that permutation groups are non-abelian, so $\sigma \circ \tau \neq \tau \circ \sigma$.
             <h4>Try composing some permutations yourself below:</h4>
@@ -143,6 +147,7 @@
             and therefore,
             $$sgn(\tau_a) = (-1)^k = \left( \frac{a}{p} \right) \square$$
         </p>
+        <p>
             Now that we understand Zolotarev's Lemma, we can discuss the proof proposed by Matt Baker. <br>
             First, we need to define some permutaions in the form of playing card arrangements. Let $m$ and $n$ be odd relatively prime positive integers. We have a stack of $mn$ playing cards numbered $0$ through $mn-1$ and you want to deal them onto the table in an $m \times n$ rectangular array.  Consider the following three ways of doing this:
             <br>
@@ -178,20 +183,53 @@
             //TODO: INSERT ANIMATION
             <br>
             <br>
-            Note that $\alpha$ permutes each column separately and $\beta$ permutes each row separately. Now, we can make a key observation.
+            Note that $\alpha$ permutes each column separately and $\beta$ permutes each row separately. Now, we can make a key observation and a couple claims.
             <br>
             <br>
             <span style="font-weight:bold">Observation:</span>
             $\alpha = \beta \circ \gamma$. Thus, $sgn(\alpha) = sgn(\beta) \cdot sgn(\gamma)$.
             <br>
+            In fact, this self-evident observation is the Law of Quadratic Reciprocity in disguise! Here's an explanation.
+            <br>
+            <br>
+            <span style="font-weight:bold">Claim 1:</span>
+            $sgn(\alpha) = \left[ \frac{m}{n} \right]$ and $sgn(\beta) = \left[ \frac{n}{m} \right]$.
+            <br>
+            <br>
+            <span style="font-weight:bold">Claim 2:</span>
+            $sgn(\gamma) = (-1)^{\frac{m-1}{2}\cdot\frac{n-1}{2}}$.
+            <br>
+            <br>
+            From these claims, we obtain:
+            <br>
+            <span style="font-weight:bold">Definition</span>
+            (Zolotarev’s Reciprocity Law): Let $m$ and $n$ be relatively prime odd positive integers, then
+                $$\left[ \frac{n}{m} \right] = (-1)^{\frac{(m-1)(n-1)}{4}} \left[ \frac{m}{n} \right]$$
+            This law, used in conjuntion with Zolotarev's Lemma, gives us the law of quadratic reciprocity! All that's left to do is prove the two claims listed above.
+            <br>
+            For the explanation, it is helpful to identify the initial stack of cards with the set of integers $\{ 0,1,2,\ldots, mn-1 \}$.  Also, by indexing the rows of the array by $0,1,\ldots,m-1$ and the columns by $0,1,\ldots,n-1$, we can identify the array with the set ${\mathbf Z}/m {\mathbf Z} \times {\mathbf Z}/n {\mathbf Z}$.  In this way we can identify $\rho$, $\kappa$, and $\delta$ with the following maps from $\{ 0,1,2,\ldots, mn-1 \}$ to ${\mathbf Z}/m {\mathbf Z} \times {\mathbf Z}/n {\mathbf Z}$ (where $x \in \{ 0,1,\ldots,m-1 \}$ and $y \in \{ 0,1,\ldots,n-1 \})$:
 
-        <p>
+            $$\rho(nx+y) = (x {\rm \; mod \;} m, y {\rm \; mod \;} n),$$
 
+            $$\kappa(x+my) = (x {\rm \; mod \;} m, y {\rm \; mod \;} n),$$
+
+            $$\delta(z) = (z {\rm \; mod \;} m, z {\rm \; mod \;} n).$$
+
+            <br>
+            <span style="font-weight:bold">Proof of Claim 1:</span>
+            By the above formulas we have $\alpha(x,y) = (nx+y,y)$ and $\beta(x,y) = (x,x+my)$.  It follows that $\alpha$ is the product of the $n$ “column permutations” $\alpha_y(x) \mapsto nx+y \pmod{m}$.  But each $\alpha_y$ is a composition of multiplication by $n$ modulo $m$ with the permutation $x \mapsto x+y \pmod{m}$, which always has sign $+1$ since it’s either trivial or a product of ${\rm GCD}(y,m)$ cycles, each of length $m/{\rm GCD}(y,m)$, and we’re assuming that $m$ is odd.  Since $n$ is odd as well, we obtain the claim about ${\rm sign}(\alpha)$, and the corresponding assertion for $\beta$ follows by symmetry.
+            <br>
+            <br>
+            <span style="font-weight:bold">Proof of Claim 2:</span>
+            The sign of a permutation $\tau$ of a totally ordered finite set is equal to $-1$ to the number of inversions of $\tau$. We put the column-major order on our array.  Note that for $a,b$ in the array, $\gamma(b)$ is less than $\gamma(a)$ in column-major order if and only if $b < a$ in row-major order.  So $\{ a,b \}$ is an inversion pair in column-major order if and only if $a$ is below and to the left of $b$.  The number of such inversion pairs is $\binom{m}{2} \cdot \binom{n}{2}$, since each pair of $2$-element subsets $\{ x,x' \}$ of $\{0,1,\ldots,m\}$ and $\{ y,y' \}$ of $\{0,1,\ldots,n\}$ gives rise to a unique inversion (by ordering the elements $a=(x,y),b=(x',y')$ so that $x < x'$ and $y' < y$).  The claim follows since $m$ and $n$ are assumed to be odd.
+            <br>
+            <br>
+            And just like that, we reach the end of our long winded task to prove the Law of Quadratic Reciprocity.
         </p>
 
         <h1>Jacobi Symbols</h1>
         <p>
-            Evaluating Legendre symbols is useful, but for large numbers, it is not feasible to factor the numerator and split into multiple Legendre symbols. This is where the Generalized Law of Quadratic Reciprocity comes in.
+            This bonus section discusses Jacobi symbols, a generalization of Legendre symbols. Evaluating Legendre symbols is useful, but for large numbers, it is not feasible to factor the numerator and split into multiple Legendre symbols. This is where the Generalized Law of Quadratic Reciprocity comes in.
             <br>
             <span style="font-weight:bold">Definition:</span>
             Let $a$ and $b$ be odd positive integers. Then the generalized law of quadratic reciprocity can be broken into three parts:
@@ -212,7 +250,8 @@
                     -\left( \frac{b}{a} \right)  &a \equiv 3 \pmod{4} \text{ and } b \equiv 3 \pmod{4}
                 \end{cases}$$
 
-            As you may have noticed, this statement is extremely similar to the Law of Quadratic Reciprocity discussed above. <br>
+            As you may have noticed, this statement is extremely similar to the Law of Quadratic Reciprocity discussed above. In fact, the argument for Zolotarev's Lemma above generalizes to give quadratic reciprocity for the Jacobi symbol
+            <br>
 
             <span style="font-weight:bold">Example:</span>
             $$\left( \frac{55}{179} \right) = -\left( \frac{179}{55} \right) = -\left( \frac{14}{55} \right) = -\left( \frac{2}{55} \right) \cdot \left( \frac{7}{55} \right) = \left( \frac{55}{7} \right) = \left( \frac{6}{7} \right) = \left( \frac{2}{7} \right) \cdot \left( \frac{3}{7} \right) =  -\left( \frac{7}{3} \right) = -\left( \frac{1}{3} \right) = -1$$
