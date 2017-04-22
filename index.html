@@ -77,7 +77,7 @@
 
                     <span style="font-weight:bold">Example:</span> Are there solutions to the congruence $x^2 + 4x \equiv 10 \pmod{7}$? <br>
 
-                    <span style="font-weight:bold">Definition:</span>
+                    <span style="font-weight:bold">Theorem:</span>
                     Let $p$ and $q$ be distinct odd primes. Then the law of quadratic reciprocity can be broken into three parts:
 
                         $$\left( \frac{-1}{p} \right) =
@@ -115,14 +115,14 @@
                     In essence, the Legendre symbol denotes whether a solution exists to the equation $x^2 \equiv a \pmod{p}$. <br>
 
                     <span style="font-weight:bold">Example:</span>
-                    $$\left( \frac{55}{179} \right) = \left( \frac{5}{179} \right) \cdot \left( \frac{11}{79} \right) = \left( \frac{179}{5} \right) \cdot -\left( \frac{179}{11} \right) = -\left( \frac{4}{5} \right) \cdot \left( \frac{3}{11} \right) \\ = -\left( \frac{3}{11} \right) = \left( \frac{11}{3} \right) = \left( \frac{2}{3} \right) = -1$$
+                    $$\left( \frac{55}{179} \right) = \left( \frac{5}{179} \right) \cdot \left( \frac{11}{79} \right) = \left( \frac{179}{5} \right) \cdot -\left( \frac{179}{11} \right) = -\left( \frac{4}{5} \right) \cdot \left( \frac{3}{11} \right) \\ = -\left( \frac{3}{11} \right) = \left( \frac{11}{3} \right) = \left( \frac{2}{3} \right) = -1.$$
 
                     As you can see, the law of quadratic reciprocity allowed us to determine that $55$ is not square modulo $79$. At this point, one might be inclined to ask how to find the solutions given the result that a number is a quadratic residue. The answer to this problem is a separate matter (see Quadratic residues) and will not be discussed here.
                 </p>
           </div><!-- /.blog-post -->
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Proof of the Theorems</h2>
+            <h2 class="blog-post-title">Proof of the Theorem</h2>
                 <p>
                     There are actually many different proofs for quadratic reciprocity. We outline two of them below.
                 </p>
@@ -131,11 +131,42 @@
           <div class="blog-post">
             <h2 class="blog-post-title">Eisenstein's Proof</h2>
                 <p>
-                    pull from text
+                    Eisenstein's proof uses a criterion of Gauss that we will prove before discussing his argument.
                 </p>
-            <h3>Gauss's Lemma</h2>
+            <h3>Gauss's Criterion</h2>
                 <p>
-                    pull from text
+                    <span style="font-weight:bold">Theorem:</span>
+                    Let $p$ be and odd prime, let $a$ be an integer that is not divisible by $p$, and let $\mu(a, p) = $ the number of integers in the list $a, 2a, ..., Pa$ that become negative when the integers in the list are reduced modulo $p$ into the interval from $-P$ to $P$. Then
+                    $$\left( \frac{a}{p}\right) = (-1)^{\mu(a, p)}.$$
+                    Before starting the proof of Gauss's Criterion, we first introduce a lemma that describes what happens when we reduce $a, 2a, 3a, ..., Pa$ modulo p.
+                    <br>
+                    <span style="font-weight:bold">Lemma:</span>
+                    When the numbers $a, 2a , 3a , ... , Pa$ are reduced modulo p into the range from $-P$ to $P$, the reduced values are $\pm1, ..., \pm P$ in some order, with each number appearing once with either a plus sign or a minus sign.
+                    <br>
+                    We will not prove this lemma here, but hope it comes as a good exercise to the reader.
+                    <br>
+                    <span style="font-weight:bold">Proof of Gauss:</span>
+                    We start by taking the list of numbers $a, 2a, ..., Pa$ and multiplying them. The product equals
+                    $$a \cdot 2a \cdot\cdot\cdot Pa = a^P(1 \cdot 2 \cdot\cdot\cdot P) = a^P \cdot P!. \tag{*}$$
+                    On the other hand, the Lemma above tells us that
+                    $$a \cdot 2a \cdot\cdot\cdot Pa \equiv (\pm1)(\pm2)\cdot\cdot\cdot(\pm P) \pmod{p},$$
+                    where the number of minus signs is $\mu(a, p)$ by definition. So
+                    $$\begin{align*}
+                        a \cdot 2a \cdot\cdot\cdot Pa &\equiv (-1)^{\mu(a, p)} \cdot 1 \cdot 2 \cdot\cdot\cdot P \pmod{P} \\
+                        &\equiv (-1)^{\mu(a, p)} \cdot P! \pmod{P}. \tag{**}
+                    \end{align*}$$
+                    Comparing the formula $(*)$ to the congruence $(**)$, we see that
+                    $$a^P \cdot P! \equiv (-1)^{\mu(a, p)} \cdot P!.$$
+                    The number $P!$ is not divisible by $p$, so we may cancel it from both sides of the congruence to get
+                    $$a^P \equiv (-1)^{\mu(a, p)} \pmod{p}.$$
+                    Finally, we observe that Euler's Criterion says that
+                    $$a^P \equiv \left( \frac{a}{p} \right) \pmod{p},$$
+                    (remember that $P = \frac{p-1}{2}$), so
+                    $$\left( \frac{a}{p} \right) \equiv (-1)^{\mu(a, p)} \pmod{p}.$$
+                    This says that $\left( \frac{a}{p} \right) - (-1)^{\mu(a, p)}$ is divisible by $p$. But the quantity $\left( \frac{a}{p} \right) - (-1)^{\mu(a, p)}$ equals either $-2, 0, \rm or, 2$, while $p \geq 3$, so we conclude that $\left( \frac{a}{p} \right) - (-1)^{\mu(a, p)} = 0. \square$
+                </p>
+                <p>
+                    Rest of the proof coming soon.
                 </p>
           </div><!-- /.blog-post -->
 
@@ -193,21 +224,20 @@
                 <h3>Zolotarev's Lemma</h3>
 
                 <p>
-                    Matt Baker makes use of Zolotarev's Lemma in his proof. <br>
                     <span style="font-weight:bold">Definition:</span>
                     Let $\tau_a$ be the permutation of $\{1, 2, ..., p-1\}$ given by multiplying by $a$ modulo $p$ where $a$ is an integer not divisible by the odd prime $p$. Then Zolotarev's Lemma states
                     $$ \left( \frac{a}{p} \right) = \left[ \frac{a}{p} \right]$$
                     where $\left[ \frac{a}{p} \right] = sgn(\tau_a)$. <br>
                     <span style="font-weight:bold">Proof:</span>
                     Let $g$ be a primitive root modulo $p$ and let $k=\rm ind_g(a)$. As a set, $\{1, 2, ..., p-1\} = \{g^0, g^1, ..., g^{p-2}\}$ modulo $p$. This means multiplying by $a$ is equivalent to adding $k$ modulo $p-1$ on $\{0, 1, ..., p-2\}$. Therefore
-                        $$sgn(\tau_a) = ((-1)^{\frac{p-1}{(k, p-1)} - 1})^{(k, p-1)} = (-1)^{p-1-(k, p-1)} = (-1)^{(k, p-1)} \text{ since (p-1) is even}$$
+                        $$sgn(\tau_a) = ((-1)^{\frac{p-1}{(k, p-1)} - 1})^{(k, p-1)} = (-1)^{p-1-(k, p-1)} = (-1)^{(k, p-1)} \text{ since (p-1) is even.}$$
                     But,
                         $$ (k, p-1) \text{ is } \begin{cases}
                             \text{odd}       &\text{if k is odd} \\
                             \text{even}      &\text{if k is even}
                         \end{cases}$$
                     and therefore,
-                    $$sgn(\tau_a) = (-1)^k = \left( \frac{a}{p} \right) \square$$
+                    $$sgn(\tau_a) = (-1)^k = \left( \frac{a}{p} \right). \square$$
                 </p>
                 <p>
                     Now that we understand Zolotarev's Lemma, we can discuss the proof proposed by Matt Baker. <br>
@@ -266,7 +296,7 @@
                     <br>
                     <span style="font-weight:bold">Definition</span>
                     (Zolotarev’s Reciprocity Law): Let $m$ and $n$ be relatively prime odd positive integers, then
-                        $$\left[ \frac{n}{m} \right] = (-1)^{\frac{(m-1)(n-1)}{4}} \left[ \frac{m}{n} \right]$$
+                        $$\left[ \frac{n}{m} \right] = (-1)^{\frac{(m-1)(n-1)}{4}} \left[ \frac{m}{n} \right].$$
                     This law, used in conjuntion with Zolotarev's Lemma, gives us the law of quadratic reciprocity! All that's left to do is prove the two claims listed above.
                     <br>
                     For the explanation, it is helpful to identify the initial stack of cards with the set of integers $\{ 0,1,2,\ldots, mn-1 \}$.  Also, by indexing the rows of the array by $0,1,\ldots,m-1$ and the columns by $0,1,\ldots,n-1$, we can identify the array with the set ${\mathbf Z}/m {\mathbf Z} \times {\mathbf Z}/n {\mathbf Z}$.  In this way we can identify $\rho$, $\kappa$, and $\delta$ with the following maps from $\{ 0,1,2,\ldots, mn-1 \}$ to ${\mathbf Z}/m {\mathbf Z} \times {\mathbf Z}/n {\mathbf Z}$ (where $x \in \{ 0,1,\ldots,m-1 \}$ and $y \in \{ 0,1,\ldots,n-1 \})$:
@@ -295,7 +325,7 @@
                 <p>
                     This bonus section discusses Jacobi symbols, a generalization of Legendre symbols. Evaluating Legendre symbols is useful, but for large numbers, it is not feasible to factor the numerator and split into multiple Legendre symbols. This is where the Generalized Law of Quadratic Reciprocity comes in.
                     <br>
-                    <span style="font-weight:bold">Definition:</span>
+                    <span style="font-weight:bold">Theorem:</span>
                     Let $a$ and $b$ be odd positive integers. Then the generalized law of quadratic reciprocity can be broken into three parts:
 
                       $$\left( \frac{-1}{b} \right) =
@@ -318,7 +348,7 @@
                     <br>
 
                     <span style="font-weight:bold">Example:</span>
-                    $$\left( \frac{55}{179} \right) = -\left( \frac{179}{55} \right) = -\left( \frac{14}{55} \right) = -\left( \frac{2}{55} \right) \cdot \left( \frac{7}{55} \right) = \left( \frac{55}{7} \right) = \left( \frac{6}{7} \right) = \left( \frac{2}{7} \right) \cdot \left( \frac{3}{7} \right) =  -\left( \frac{7}{3} \right) = -\left( \frac{1}{3} \right) = -1$$
+                    $$\left( \frac{55}{179} \right) = -\left( \frac{179}{55} \right) = -\left( \frac{14}{55} \right) = -\left( \frac{2}{55} \right) \cdot \left( \frac{7}{55} \right) = \left( \frac{55}{7} \right) = \left( \frac{6}{7} \right) \\ = \left( \frac{2}{7} \right) \cdot \left( \frac{3}{7} \right) =  -\left( \frac{7}{3} \right) = -\left( \frac{1}{3} \right) = -1.$$
 
                     As you can see, we were able to evaluate the same Legendre as the beginning of the article without factoring $55$.
                 </p>
