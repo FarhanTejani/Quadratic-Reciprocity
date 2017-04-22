@@ -185,7 +185,7 @@ var test_canvas = function (p) {
     };
 
     p.draw = function () {
-        p.background(240);
+        p.background(255);
         render_list.forEach(function(e) {e.render(p);});
         if (!done) {
             if (render_list[0].isDone() && render_list[1].isDone()) {
@@ -215,7 +215,7 @@ var static_canvas = function (p) {
 
     p.setup = function() {
         p.fill(60);
-        p.createCanvas(500, 500);
+        p.createCanvas(500, 400);
         p.frameRate(FPS);
         render_list.push(new Permutation({1:2, 2:3, 3:4, 4:1}, 4, 0, 100, p));
         render_list.forEach(function(e) {e.render(p);});
