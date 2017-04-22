@@ -246,17 +246,17 @@
                     <br>
                     <span style="font-weight:bold">Row Deal</span>
                     ($\rho$): Deal the cards into rows, going left to right and top to bottom.
-                    //TODO: INSERT ROW DEAL
+                    <div id="row-card" align="center"></div>
                     <br>
                     <br>
                     <span style="font-weight:bold">Column Deal</span>
                     ($\kappa$): Deal the cards into columns, going top to bottom and left to right.
-                    //TODO: INSERT COLUMN DEAL
+                    <div id="col-card" align="center"></div>
                     <br>
                     <br>
                     <span style="font-weight:bold">Diagonal Deal</span>
                     ($\delta$): Deal the cards diagonally down and to the right, wrapping around from bottom to top or right to left whenever necessary.
-                    //TODO: INSERT DIAGONAL DEAL
+                    <div id="diag-card" align="center"></div>
                     <br>
                     <br>
                     Additionally, each of these operations has an inverse action which  undos the above deals. We will denote these by Row pickup ($\rho^{-1}$), Column pickup ($\kappa^{-1}$), and Diagonal pickup ($\delta^{-1}$). We combine these basic moves as follows, obtaining three different permutations of the rectangular array which we denote by $\alpha$, $\beta$, and $\gamma$:
@@ -264,15 +264,15 @@
                     <br>
                     <br>
                     $\alpha = \delta \circ \rho^{-1}$ is a row pickup followed by a diagonal deal.
-                    //TODO: INSERT ANIMATION
+                    <div id="alpha" align="center"></div>
                     <br>
                     <br>
                     $\beta = \delta \circ \kappa^{-1}$ is a column pickup followed by a diagonal deal.
-                    //TODO: INSERT ANIMATION
+                    <div id="beta" align="center"></div>
                     <br>
                     <br>
                     $\gamma = \kappa \circ \rho^{-1}$ is a row pickup followed by a column deal.
-                    //TODO: INSERT ANIMATION
+                    <div id="gamma" align="center"></div>
                     <br>
                     <br>
                     Note that $\alpha$ permutes each column separately and $\beta$ permutes each row separately. Now, we can make a key observation.
