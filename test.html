@@ -1,0 +1,145 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Quadratic Reciprocity</title>
+    <meta name="description" content="Quadratic Reciprocity">
+    <meta name="author" content="Farhan Tejani and Marc Marone">
+
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script language="javascript" type="text/javascript" src="empty-example/libraries/p5.js"></script>
+    <script language="javascript" type="text/javascript" src="empty-example/permutations.js"></script>
+    <script language="javascript" type="text/javascript" src="empty-example/quad.js"></script>
+</head>
+
+<body>
+    <h1>What is Quadratic Reciprocity?</h1>
+        <p>
+            The law of quadratic reciprocity is a well known number theoretic theorem that gives conditions for the solvability of quadratic equations modulo prime numbers. <br>
+
+            <span style="font-weight:bold">Example:</span> Are there solutions to the congruence $x^2 + 4x \equiv 10 \pmod{7}$? <br>
+
+            <span style="font-weight:bold">Theorem:</span>
+            Let $p$ and $q$ be distinct odd primes. Then the law of quadratic reciprocity can be broken into three parts:
+
+                $$\left( \frac{-1}{p} \right) =
+                \begin{cases}
+                    1   &p \equiv 1 \pmod{4} \\
+                    -1  &p \equiv 3 \pmod{4}
+                \end{cases}$$
+                $$\left( \frac{2}{p} \right) =
+                \begin{cases}
+                    1   &p \equiv 1 \rm\ or\ 7 \pmod{8} \\
+                    -1  &p \equiv 3 \rm\ or\ 5 \pmod{8}
+                \end{cases}$$
+                $$\left( \frac{q}{p} \right) =
+                \begin{cases}
+                    \left( \frac{p}{q} \right)   &p \equiv 1 \pmod{4} \text{ or } q \equiv 1 \pmod{4} \\
+                    -\left( \frac{p}{q} \right)  &p \equiv 3 \pmod{4} \text{ and } q \equiv 3 \pmod{4}
+                \end{cases}$$
+
+            We will focus on the proof for the 3rd more general case for the purposes of this article.
+        </p>
+
+        <h1>Why is it Useful?</h1>
+        <p>
+            The main use for the law of quadratic reciprocity is to compute Legendre symbols. <br>
+
+            <span style="font-weight:bold">Definition:</span>
+            The Legendre symbol of $a$ modulo $p$ is
+                $$\left( \frac{a}{p} \right) =
+                \begin{cases}
+                    1   &\text{if a is a quadratic residue modulo p} \\
+                    -1  &\text{if a is a nonresidue modulo p}
+                \end{cases}$$
+            In essence, the Legendre symbol denotes whether a solution exists to the equation $x^2 \equiv a \pmod{p}$. <br>
+
+            <span style="font-weight:bold">Example:</span>
+            $$\left( \frac{55}{179} \right) = \left( \frac{5}{179} \right) \cdot \left( \frac{11}{79} \right) = \left( \frac{179}{5} \right) \cdot -\left( \frac{179}{11} \right) = -\left( \frac{4}{5} \right) \cdot \left( \frac{3}{11} \right) = -\left( \frac{3}{11} \right) = \left( \frac{11}{3} \right) = \left( \frac{2}{3} \right) = -1$$
+
+            As you can see, the law of quadratic reciprocity allowed us to determine that $55$ is not square modulo $79$. At this point, one might be inclined to ask how to find the solutions given the result that a number is a quadratic residue. The answer to this problem is a separate matter (see Quadratic residues) and will not be discussed here.
+        </p>
+
+        <h1>Proof of the Theorem</h1>
+            There are actually many different proofs for quadratic reciprocity. We outline two of them below.
+
+        <h2>Eisenstein's Proof</h2>
+        <p>
+            Pull from text...
+        </p>
+
+        <h3>Gauss's Lemma</h3>
+
+        <h2>A Journey through Permutations</h2>
+        <p>
+            Before we get to the second proof of quadratic reciprocity, we are going to need to learn a little bit about algebraic permutations.
+
+            A permutation of a set $S$ is defined as a bijection from $S$ to itself. That is, it is a function from $S$ to $S$ that is both injective (one-to-one) and surjective (onto).
+
+            For example, $f: \{1, 2, 3, 4\} \to \{1, 2, 3, 4\}$ is a permutaion given by
+                $$f(n) = \begin{cases}
+                    n+1     & n < 4 \\
+                    1       & n = 4
+                \end{cases}$$
+
+            It can be visualized as such: <br>
+            <div id = "static_perm" align="center"></div>
+
+            Notice the cycle decomposition and $sgn()$ value accompanying the figure above. <br>
+            <span style="font-weight:bold">Definition:</span>
+            The $\textit{cycle decomposition}$ is a quick way to write out a permutation without having to draw it or write out a piecewise function. It simply maps the current element to the subsequent one.
+            <span style="font-weight:bold">Example:</span>
+            The cycle decomposition $(1 3 2 4)$ refers to the permutation mapping $1 \to 3 \to 2 \to 4 \to 1$. <br>
+            <span style="font-weight:bold">Definition:</span>
+            The $sgn()$ or sign of a permutation $p$ is defined as
+                $$sgn(p) = \begin{cases}
+                    1       &\text{if the number of crossings is even} \\
+                    -1      &\text{if the number of crossings is odd}
+                \end{cases}$$
+
+            or equivalently $sgn(p) = (-1)^{\text{# of inversions}}$ where an inversion is a pair $(i, j)$ such that $i < j$, but $p(i) > p(j)$. <br>
+
+            Permutations can be composed just like normal functions. Say you have a permutation $\sigma$ and another permutation $\tau$. Then $\sigma \circ \tau = \sigma(\tau(n))$ and $\tau \circ \sigma = \tau(\sigma(n))$. Note that permutation groups are non-abelian, so $\sigma \circ \tau \neq \tau \circ \sigma$. Try composing some permutations yourself below: <br>
+
+
+            <div id = "perm" align="center"></div>
+            <br>
+            <span style="font-weight:bold">More sign facts:</span>
+            $$sign(\sigma\tau) = sign(\sigma) \cdot sign(\tau)$$
+            $$sign(\text{m-length-cycle}) = (-1)^{m-1}$$
+        </p>
+
+        <h2>Matt Baker's Proof</h2>
+        <p>
+
+        </p>
+
+        <h3>Zolotarev's Lemma</h3>
+        <p>
+
+        </p>
+
+        <h1>Jacobi Symbols</h1>
+        <p>
+            Evaluating Legendre symbols is useful, but for large numbers, it is not feasible to factor the numerator and split into multiple Legendre symbols. This is where the Generalized Law of Quadratic Reciprocity comes in.
+
+            It states: Given positive odd integers a and b,
+
+            (-1/b) = ...
+            (2/b) = ...
+            (a/b) = {(b/a) if a or b congurent 1 mod 4, -(b/a) if a and b congruent 3 mod 4}
+
+            As you may have noticed, this statement is extremely similar to the Law of Quad. Rec. discussed above.
+        </p>
+
+</body>
+</html>

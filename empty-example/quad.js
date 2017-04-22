@@ -277,9 +277,9 @@ var gamma_sketch_canvas = function (p) {
     };
 }
 
-var alpha_sktech = new p5(alpha_sketch_canvas, "alpha");
-var beta_sktech = new p5(beta_sketch_canvas, "beta");
-var gamma_sketch = new p5(gamma_sketch_canvas, "gamma");
+// var alpha_sktech = new p5(alpha_sketch_canvas, "alpha");
+// var beta_sktech = new p5(beta_sketch_canvas, "beta");
+// var gamma_sketch = new p5(gamma_sketch_canvas, "gamma");
 
 
 
