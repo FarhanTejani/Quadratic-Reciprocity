@@ -1,11 +1,11 @@
-var MOVE_RATE = 0.5;
-var BASE_RATE = 1;
+var MOVE_RATE = 0.3;
+var BASE_RATE = .5;
 var CARD_WIDTH = 100;
 var CARD_HEIGHT = 140;
-var DECKX = CARD_WIDTH * 2;
+var DECKX = CARD_WIDTH * 2 + CARD_WIDTH / 2;
 var DECKY = CARD_HEIGHT * 4;
 var CANVASX = 600;
-var CANVASY = 700;
+var CANVASY = 740;
 var FPS = 30;
 var card_icon;
 p5.disableFriendlyErrors = true;
@@ -26,7 +26,7 @@ function get_delta(start, end) {
 }
 
 function grid_to_canvas(r, c) {
-    return [CARD_WIDTH * c, CARD_HEIGHT * r];
+    return [50 + CARD_WIDTH * c, 20 + CARD_HEIGHT * r];
 }
 
 function Card(x, y, id) {
@@ -155,6 +155,7 @@ function CardAnimation(init_function, operations) {
     this.grid = [];
     this.STATE = 0;
     this.step = 0;
+    this.paused = true;
 
     //get access to the object scope
     var animation = this;
@@ -163,6 +164,12 @@ function CardAnimation(init_function, operations) {
        p.setup = function() {
             p.createCanvas(CANVASX, CANVASY);
             p.frameRate(FPS);
+
+            p.clear();
+            p.stroke(60);
+            p.rect(0, 0, CANVASX - 1, CANVASY - 1);
+            p.noStroke();
+
             //todo
             card_icon = p.loadImage("card.png");
             init_function(animation);
@@ -170,22 +177,60 @@ function CardAnimation(init_function, operations) {
         };
 
         p.draw = function() {
-            p.clear();
-            animation.cards.forEach(function(e) {e.render(p)});
-            animation.deck.forEach(function(e) {e.render(p)});
-            animation.cards.forEach(function(e) {e.tick()});
+            if (animation.paused) {
+                p.textSize(46);
+                p.fill(60);
+                p.textAlign(p.CENTER)
+                p.text("CLICK TO PLAY", CANVASX / 2, CANVASY / 2);
+                p.noFill();
+            } else { 
+                p.clear();
+                p.stroke(60);
+                p.rect(0, 0, CANVASX - 1, CANVASY - 1);
+                p.noStroke();
 
-            if (animation.cards.every(function(e) {return e.isDone()})) {
-                operations[animation.STATE](animation.grid, animation.deck, animation.step);
-                animation.step += 1;
-            }
+                //animation.cards.forEach(function(e) {e.render(p)});
+                //defer rendering these cards so that overlaping cards make sense
+                var render_later = [];
 
-            if (animation.step == 15) {
-                animation.STATE = (animation.STATE + 1) % operations.length;
-                animation.step = 0;
+                animation.cards.forEach(function(e) {
+                    if (e.isDone()) {
+                        e.render(p);
+                    } else {
+                        render_later.push(e);
+                    }
+                });
+
+                render_later.forEach(function(e) {e.render(p)});
+                
+                 
+                if (animation.deck.length > 0) {
+                    animation.deck[animation.deck.length - 1].render(p);
+                }
+
+                //animation.deck.forEach(function(e) {e.render(p)});
+                
+                animation.cards.forEach(function(e) {e.tick()});
+
+                if (animation.cards.every(function(e) {return e.isDone()})) {
+                    //call the operation for this state
+                    operations[animation.STATE](animation.grid, animation.deck, animation.step);
+                    animation.step += 1;
+                }
+
+                if (animation.step == 15) {
+                    animation.STATE = (animation.STATE + 1) % operations.length;
+                    animation.step = 0;
+                }
             }
         };
 
+        p.mouseClicked = function() {
+            if (p.mouseX >= 0 && p.mouseX < CANVASX && p.mouseY >= 0 && p.mouseY < CANVASY) {
+                animation.paused = !animation.paused;
+            }
+            return false;
+        }
     }
 }
 
